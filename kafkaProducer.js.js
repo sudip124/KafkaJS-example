@@ -1,28 +1,19 @@
 const axios = require('axios');
 //const createHookReceiver = require('npm-hook-receiver')
-const kafka = require('./kafka')
+const kafka = require('./kafkaClient')
+//require('dotenv').config()
 
 const producer = kafka.producer()
-const apiURL = 'https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=3e7cc266ae2b0e0d78e279ce8e361736&text=test&format=json&nojsoncallback=1';
 
-const main = async () => {
-
-  console.log('process.env.KAFKA_TOPIC: ' + process.env.KAFKA_TOPIC)
-
-  /*try {
-    axios.get(apiURL);
-  }catch(err) {
-    console.log(err);
-
-  }*/
+async function publishtoKafka(item) {
+  //console.log('item.id: ' + item.id);
   await producer.connect()
   try {
       
       const responses = await producer.send({
           topic: process.env.KAFKA_TOPIC,
           messages: [
-              { key: 'key3', value: 'hello world again', partition: 0 },
-              { key: 'key4', value: 'hey hey random', partition: 1 }
+              { key: item.id, value: item.owner, partition: 0 }
           ],
       })
       console.log('Published message', { responses })
@@ -30,6 +21,31 @@ const main = async () => {
   } catch (error) {
       console.error('Error publishing message', error)
   }
+}
+const main = async () => {
+
+  console.log('process.env.FLICKR_URL: ' + process.env.FLICKR_URL)
+
+  try {
+    axios.get(process.env.FLICKR_URL + 'test')
+    .then(response => {
+      console.log('NUmber of record counts: ' + response.data.photos.total)
+      let photoArray = response.data.photos.photo
+      photoArray.forEach(publishtoKafka)
+      /*photoArray.forEach(element => {
+        console.log(element.id);
+      });*/
+    })
+    .catch(error => {
+      console.log('Unable to call Flikr API: ' + error);
+    });
+  }
+  catch(err) {
+    console.log(err);
+
+  }
+
+  
     
     
   /*const server = createHookReceiver({

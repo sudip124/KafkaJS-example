@@ -1,4 +1,4 @@
-const kafka = require('./kafka')
+const kafka = require('./kafkaClient')
 
 const consumer = kafka.consumer({
   groupId: "sudip-group"
@@ -25,7 +25,7 @@ const main = async () => {
 }
 
 main().catch(async error => {
-  console.error(error)
+  console.error('Some error happened:' + error)
   try {
     await consumer.disconnect()
   } catch (e) {

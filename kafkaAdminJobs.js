@@ -17,7 +17,7 @@ main().catch(error => {
 })*/
 
 
-const kafka = require('./kafka')
+const kafka = require('./kafkaClient')
 
 const admin = kafka.admin()
 
@@ -46,9 +46,9 @@ async function deleteTopic(topic)
   console.log('Delete Topic status: ' + status)
 }
 
-//createTopic(process.env.KAFKA_TOPIC);
-/*const topicArray = new Array("testing_admin", "Sudip-Hello-World2");
+createTopic(process.env.KAFKA_TOPIC);
+/*const topicArray = new Array("Sudip-Hello-World");
 deleteTopic(topicArray);*/
-listTopics();
+//listTopics();
 
  
