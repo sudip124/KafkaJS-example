@@ -1,24 +1,4 @@
-/*const kafka = require('./kafka')
-
-const topicName = process.env.KAFKA_TOPIC
-const admin = kafka.admin()
-
-const main = async () => {
-  await admin.connect()
-  await admin.createTopics({
-    topics:  [{ topic: topicName, numPartitions: 2, replicationFactor: 3 }],
-    waitForLeaders: true,
-  })
-}
-
-main().catch(error => {
-  console.error(error)
-  process.exit(1)
-})*/
-
-
 const kafka = require('./kafkaClient')
-
 const admin = kafka.admin()
 
 async function createTopic(topic)
