@@ -1,14 +1,14 @@
 const kafka = require('./kafkaClient')
 
 const consumer = kafka.consumer({
-  groupId: "sudip-group"
+  groupId: process.env.KAFKA_GROUP_ID
 })
 
 const main = async () => {
   await consumer.connect()
 
   await consumer.subscribe({
-    topic: "Sudip-Hello-World",
+    topic: process.env.KAFKA_TOPIC,
     fromBeginning: true
   })
 
